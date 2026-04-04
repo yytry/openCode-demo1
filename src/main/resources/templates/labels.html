@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>标签管理</title>
+    <link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <h1 class="mb-4">标签管理</h1>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">新增标签</h5>
+            <form action="/labels/add" method="post" class="row g-3">
+                <div class="col-auto">
+                    <input type="text" name="labelName" class="form-control" placeholder="标签名称" required>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">添加</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">标签列表</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>标签名称</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="label : ${labels}">
+                        <td th:text="${label.labelId}"></td>
+                        <td th:text="${label.labelName}"></td>
+                        <td>
+                            <span th:class="${label.labelStatus == '1'} ? 'badge bg-success' : 'badge bg-secondary'"
+                                  th:text="${label.labelStatus == '1'} ? '生效' : '失效'"></span>
+                        </td>
+                        <td>
+                            <form th:action="@{/labels/toggle/{id}(id=${label.labelId})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-warning">切换状态</button>
+                            </form>
+                            <form th:action="@{/labels/delete/{id}(id=${label.labelId})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('确定删除?')">删除</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div th:if="${#lists.isEmpty(labels)}" class="text-center text-muted py-4">
+                暂无标签，请添加
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
