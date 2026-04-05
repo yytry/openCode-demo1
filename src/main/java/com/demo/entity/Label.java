@@ -1,5 +1,6 @@
 package com.demo.entity;
 
+import com.demo.constants.pubConstants;
 import javax.persistence.*;
 
 @Entity
@@ -15,13 +16,13 @@ public class Label {
     private String labelName;
     
     @Column(name = "label_status", nullable = false, length = 5)
-    private String labelStatus = "1";
+    private String labelStatus = pubConstants.STATUS_ACTIVE;
 
     public Label() {}
 
     public Label(String labelName) {
         this.labelName = labelName;
-        this.labelStatus = "1";
+        this.labelStatus = pubConstants.STATUS_ACTIVE;
     }
 
     public Integer getLabelId() {

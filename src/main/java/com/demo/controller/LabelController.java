@@ -2,7 +2,7 @@ package com.demo.controller;
 
 import com.demo.entity.Label;
 import com.demo.repository.LabelRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.demo.constants.pubConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/labels")
 public class LabelController {
 
-    @Autowired
-    private LabelRepository labelRepository;
+    private final LabelRepository labelRepository;
+
+    public LabelController(LabelRepository labelRepository) {
+        this.labelRepository = labelRepository;
+    }
 
     @GetMapping
     public String listLabels(Model model) {
@@ -37,7 +40,10 @@ public class LabelController {
     public String toggleStatus(@PathVariable Integer id) {
         Label label = labelRepository.findById(id).orElse(null);
         if (label != null) {
-            label.setLabelStatus("1".equals(label.getLabelStatus()) ? "0" : "1");
+            String newStatus = pubConstants.STATUS_ACTIVE.equals(label.getLabelStatus()) 
+                    ? pubConstants.STATUS_INACTIVE 
+                    : pubConstants.STATUS_ACTIVE;
+            label.setLabelStatus(newStatus);
             labelRepository.save(label);
         }
         return "redirect:/labels";
